@@ -1,0 +1,194 @@
+---
+title: "Math 265: Homework 6"
+subtitle: "Mapping and Joining!"
+author: "Be Sure to Put Your Name Here"  
+format: 
+    html: 
+      toc: true
+      number-sections: true
+      number-depth: 3
+      theme: minty
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+# Mapping County Census Data \[10 points\]
+
+```{r, include = FALSE}
+library(maps)
+```
+
+Knowing how to access and work with census data is an important skill for any data scientist. For this question, you will need to import census data and access the information you need to construct choropleth county-level maps reflecting the proportion of the population who are older adults.
+
+The `data` directory contains files you will need to carry out this analysis:
+
+-   `AGE03.csv`: census file containing the data you will need (and much more that you do not need!)
+
+-   `Mastdata.xls`: spreadsheet containing a list of more than 6000 census items (with descriptions) that are available at the county level.
+
+**a)** Open `Mastdata.xls` outside of RStudio (in Excel or Google Sheets) and find the name of the one item which contains this very specific information: "Resident population 65 years and over, percent (July 1 - estimate) 2009". Write down the variable name (known in Census jargon as the `Item_Id`).  [1 point]
+
+**Answer:**
+
+**b)** Now use an appropriate `readr()` statement to read the entire `AGE03.csv` data file into a tibble called `census_data`. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**c)** Select from `census_data` only the columns and rows you will need to graph the percent of residents 65 and over for each county in the mainland US, excluding DC, Hawaii, and Alaska. Use appropriate commands to select the columns and rows you need and/or exclude those you do not need. (The column `STCOU` gives state and county codes and may be useful in selecting/filtering rows.) Save the data set under the name `county_age_data`. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**d)** To combine the census data with the mapping data will require a couple of steps. First split the `Areaname` variable into a variable called `subregion` which contains the county name and `region` which contains the state abbreviation. Call this new file `county_age_data2`. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**e)** In order to use the county level mapping data, we need the state name rather than just the abbreviation. Create a "crosswalk" or look-up table (actually a tibble) using the R built-in variables **state.abb** and **state.name** (they're part of Base R and always available). Your new tibble should contain fifty rows, one for each state and two columns, one for the state 2-letter abbreviation and one for the state name. Use this `crosswalk` table to add the column of state names to your county data. Call the new data set `county_age_data3`. (Note: If we did this all in one long pipe, we would not need intermediate names but it might also get more confusing the first time through.) [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**f)** Now join the county level data to the mapping data from the package **maps** we used in class. Call the new data set `merged_county()`. Create a county-level map of the U.S that maps the proportion of the population 65 and over to the "fill" aesthetic. You can use whatever color scheme you like. (Hint: If you get everything to work but see some holes in your map, don't worry. Continue to the next part.) [2 points]
+
+**Answer:**
+
+```{r}
+
+```
+
+**g)** Unless you have been very thorough, your map likely has some holes in it because not all county names matched correctly. Use `anti_join()` to identify the counties with no matches. By looking at the original data, identify at least 2 reasons why matches failed. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**h)** Create a subset of the census data for only counties in Florida. Use string functions to fix the unmatched county names in Florida so that each Florida county has complete data. Use this data set to create a Florida county map with counties shaded by percent of the population 65 and over. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**i)** Within Florida, where are high concentrations of seniors? Look at your map and comment on any patterns you see. [1 point]
+
+**Answer:**
+
+#  Joining Student Data Tables [10 points]
+
+In the data folder of this repository, you will find five small hypothetical student record tables: 
+
+* "id_list.csv": contains names, IDs and birthdates of students  
+  
+* "study_abroad.csv": records of students' study abroad participation  
+  
+* "admission.csv": student records compiled by the admission office during the application process  
+  
+* "acad_records.csv": student academic records including major and GPA  
+  
+* "housing.csv": student residence information for students living on-campus  
+  
+
+The questions below ask you to carry out "joins" to create a new tibble and/or answer a question. The joins you have to choose from include:  
+
+Mutating joins:  
+  * `inner_join()`  
+  * `left_join()`  
+  * `right_join()`  
+  * `full_join()`  
+
+Filtering joins:  
+  * `semi_join()`  
+  * `anti_join()`  
+  
+Remember that you may have to specific the key to use and that it may be necessary to use more than one variable as the key.  
+
+**a)** Use `read_csv()` to read these data files into datasets (tibbles) called **id_list**, **study_abroad**, **admission**, **acad_records**, and **housing**. [1 point]    
+
+**Answer:**
+
+```{r}
+
+```
+
+
+**b)** Use an appropriate join to add student's major and college GPA to the **id_list** table without changing the order of the rows. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+
+**c)** For each student in the id_list table, create a table that also contains the dorm they lived in. If they lived off campus, the dorm variable should contain an NA value.  [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**d)** Repeat the previous but instead create a table that only contains students who lived in dorms. Your join should exclude off-campus students. [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+
+**e)** Carry out a single join that displays just the information in the **id_list** for two students: one whose application was accidentally deleted (don't worry, it's on the backup!) and the student whose name was misspelled by admissions.  [1 point]
+
+**Answer:**
+
+```{r}
+
+```
+
+**f)**  Carry out a single join that prints a list of students who did NOT participate in study abroad.   [1 point] 
+
+**Answer:**
+
+```{r}
+
+```
+
+
+**g)** Use appropriate joins and data transformation commands to create a table that includes all columns in the study abroad table and additionally their college GPAs, a total of 4 columns. [1 point]  
+
+**Answer:**
+
+```{r}
+
+```
+
+
+**h)** Use appropriate joins and transformation commands to create a table that contains a list of all current students containing the following information in this order: student id, first and last name, major, college GPA, study abroad site (or NA for non-participants), and a variable called `housing` that is "ON" if they lived in a campus dorm and "OFF" otherwise. Do NOT include a column with the name of the dorm in which they lived. Sort your table by student ID number in increasing numerical order. [3 points]
+
+**Answer:**
+
+```{r}
+
+```
